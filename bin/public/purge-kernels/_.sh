@@ -5,13 +5,14 @@ purge-kernels () {
   local CURRENT="$(vkpurge list | sort --version-sort | tac)"
   local TOTAL="$(echo "$CURRENT" | wc -l)"
 
+  echo "TOTAL: $TOTAL"
 
-  if [[ "$TOTAL" -gt 5 ]]; then
-    echo "TOTAL: $TOTAL"
-    for VER in $(echo "$CURRENT" | tail -n +5 | tac); do
-      echo "=== Removing: $VER"
-      sudo vkpurge rm "$VER"
-      echo ""
-    done
+  if [[ ! "$TOTAL" -gt 5 ]]; then
+    echo "No purge necessary." >&2
+    return 0
   fi
+
+  local OLD="$(echo "$CURRENT" | tail -n +5 | tac)"
+  echo "=== Removing: $OLD"
+  sudo vkpurge rm $OLD
 } # === end function
