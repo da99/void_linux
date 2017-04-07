@@ -1,7 +1,7 @@
 
 # === {{CMD}}
 # === {{CMD}} --one-by-one # Upgrade all packages using xbps-install -yu "NAME".
-upgrade-os () {
+upgrade () {
   case "$@" in
     --one-by-one)
       IFS=$'\n'
@@ -13,6 +13,7 @@ upgrade-os () {
 
     "")
       sudo xbps-install -Su
+      sudo xbps-remove -O
       ;; # === end ""
 
     *)
